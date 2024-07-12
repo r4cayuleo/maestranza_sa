@@ -1,0 +1,82 @@
+{% extends 'inventory/base.html' %}
+
+{% block title %}Compra de Materiales{% endblock %}
+
+{% block content %}
+<h2>Compra de Materiales</h2>
+
+{% if messages %}
+    {% for message in messages %}
+        <script>
+            alert('{{ message }}');
+        </script>
+    {% endfor %}
+{% endif %}
+
+<table>
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Cantidad</th>
+            <th>Ubicación</th>
+            <th>Registrado por</th>
+            <th>Imagen</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for material in materials %}
+        <tr>
+            <td>{{ material.name }}</td>
+            <td>{{ material.description }}</td>
+            <td>{{ material.quantity }}</td>
+            <td>{{ material.location.name }}</td>
+            <td>{{ material.added_by.username }}</td>
+            <td>
+                {% if material.image %}
+                    <img src="{{ material.image.url }}" alt="{{ material.name }}" width="100">
+                {% else %}
+                    No image available
+                {% endif %}
+            </td>
+            <td>
+                <form method="post" action="{% url 'add_to_cart' material.id %}">
+                    {% csrf_token %}
+                    <button type="submit">Agregar al Carrito</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h2>Carrito de Compras</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Cantidad</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in cart %}
+        <tr>
+            <td>{{ item.material.name }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>
+                <form method="post" action="{% url 'remove_from_cart' item.material.id %}">
+                    {% csrf_token %}
+                    <button type="submit">Eliminar</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<form method="post" action="{% url 'finalize_purchase' %}">
+    {% csrf_token %}
+    <button type="submit">Finalizar Compra</button>
+</form>
+{% endblock %}
