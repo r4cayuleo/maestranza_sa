@@ -12,5 +12,5 @@ urlpatterns = [
 # Redirigir la raíz a la vista de login
 urlpatterns += [
     path('', include('django.contrib.auth.urls')),  # Para manejar la autenticación
-    path('', include('inventory.urls')),  # Incluir URLs del app inventory
+    path('', include('inventory.urls')),  # Incluir URLs de la app inventory
 ]
