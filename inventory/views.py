@@ -292,7 +292,9 @@ def generate_report_view(request):
     return render(request, 'inventory/generate_report.html', context)
 
 
-def generate_report(report_type):
+def generate_report(request):
+    report_type = request.POST.get('report_type')
+
     if report_type == 'category':
         report = Material.objects.values('name').annotate(total_quantity=Sum('quantity'))
     elif report_type == 'inventory_status':
@@ -305,7 +307,13 @@ def generate_report(report_type):
         report = Material.objects.all()
     else:
         report = Material.objects.all()
-    return report
+    
+    context = {
+        'report': report,
+        'report_type': report_type,
+    }
+    return render(request, 'inventory/report.html', context)
+
 
 
 def download_report(materials, report_type):

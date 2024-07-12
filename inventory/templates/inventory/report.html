@@ -1,0 +1,32 @@
+{% extends 'inventory/base.html' %}
+
+{% block title %}Reporte de {{ report_type }}{% endblock %}
+
+{% block content %}
+<h2>Reporte de {{ report_type }}</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Cantidad</th>
+            <th>Ubicación</th>
+            <th>Registrado por</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in report %}
+        <tr>
+            <td>{{ item.name }}</td>
+            <td>{{ item.description }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>{{ item.location.name }}</td>
+            <td>{{ item.added_by.username }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<a href="{% url 'dashboard' %}">Regresar al Dashboard</a>
+{% endblock %}
